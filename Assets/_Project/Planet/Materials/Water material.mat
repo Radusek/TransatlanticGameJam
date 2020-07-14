@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Planet material
+  m_Name: Water material
   m_Shader: {fileID: -6465566751694194690, guid: fef6ead3bf431c641997e3f94ceee44b,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 3000
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -25,5 +25,5 @@ Material:
     - _FresnelPower: 10
     m_Colors:
     - Color_1A007F2B: {r: 0.3686275, g: 1.168628, b: 2, a: 0}
-    - _Color: {r: 0, g: 0.5283019, b: 0.026415069, a: 0}
-    - _OutlineColor: {r: 0.5647059, g: 1.7568628, b: 2.9960785, a: 0}
+    - _Color: {r: 0.20069417, g: 0.60595196, b: 0.7735849, a: 1}
+    - _OutlineColor: {r: 0.5647059, g: 1.7568628, b: 2.9960785, a: 1}
