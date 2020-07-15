@@ -6,8 +6,19 @@ public class SowingManager : Singleton<SowingManager>
     [SerializeField]
     private Plant[] plants;
 
+    [SerializeField]
+    private ParticleSystem sowingHintParticles;
+
     private bool isSowing = true;
-    public bool IsSowing => isSowing;
+    public bool IsSowing
+    {
+        get { return isSowing; }
+        set
+        {
+            isSowing = value;
+            sowingHintParticles.gameObject.SetActive(value);
+        }
+    }
 
     private int selectedPlant;
 
@@ -15,43 +26,58 @@ public class SowingManager : Singleton<SowingManager>
 
     private Camera mainCamera;
     private int sowingLayerMask;
+    private bool didHit;
+    private bool isSuitablePlaceToGrow;
+    private Vector3 plantPosition;
 
 
     protected override void Awake()
     {
         base.Awake();
         mainCamera = Camera.main;
-        sowingLayerMask = 1 << LayerMask.NameToLayer("Planet") | 1 << LayerMask.NameToLayer("Water");
+        sowingLayerMask = -1;
+    }
+
+    public void ShootRaycast()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        didHit = Physics.Raycast(ray, out hit, Mathf.Infinity, sowingLayerMask);
+        sowingHintParticles.gameObject.SetActive(didHit);
+        if (!didHit)
+            return;
+
+        sowingHintParticles.gameObject.transform.position = hit.point * 1.01f;
+        sowingHintParticles.gameObject.transform.forward = hit.point;
+
+        isSuitablePlaceToGrow = hit.transform.gameObject.layer.IsInLayer(GetSelectedPlant.WhereMightGrow);
+        var main = sowingHintParticles.main;
+        main.startColor = isSuitablePlaceToGrow ? Color.green : Color.red;
+        plantPosition = hit.point;
     }
 
     public void TrySow()
     {
-        Plant plant = GetSelectedPlant;
+        if (!isSuitablePlaceToGrow)
+            return;
 
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, sowingLayerMask))
-        {
-            if (hit.transform.gameObject.layer.IsInLayer(plant.WhereMightGrow))
-            {
-                GameObject go = SpawnPlant(plant, hit);
-                SetPlantGrowing(plant, go);
-            }
-        }
+        GameObject go = SpawnPlant();
+        SetPlantGrowing(go);
     }
 
-    private static GameObject SpawnPlant(Plant plant, RaycastHit hit)
+    private GameObject SpawnPlant()
     {
-        Vector3 groundedPosition = 0.99f * hit.point;
-        GameObject go = Instantiate(plant.PlantPrefab, groundedPosition, Quaternion.identity);
-        go.transform.up = hit.point;
+        Vector3 groundedPosition = 0.99f * plantPosition;
+        GameObject go = Instantiate(GetSelectedPlant.PlantPrefab, groundedPosition, Quaternion.identity);
+        go.transform.up = groundedPosition;
         return go;
     }
 
-    private static void SetPlantGrowing(Plant plant, GameObject go)
+    private void SetPlantGrowing(GameObject go)
     {
-        Vector3 finalScale = go.transform.localScale;
-        go.transform.localScale = finalScale / 10f;
-        go.transform.DOScale(finalScale, plant.GrowingTime);
+        Transform treeGraphics = go.transform.GetChild(0);
+        Vector3 finalScale = treeGraphics.localScale;
+        treeGraphics.localScale = finalScale / 10f;
+        treeGraphics.DOScale(finalScale, GetSelectedPlant.GrowingTime);
     }
 }
