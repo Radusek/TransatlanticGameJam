@@ -2,6 +2,15 @@
 
 public class GameManager : Singleton<GameManager>
 {
+    public Camera MainCamera { get; private set; }
+
+
+    protected override void Awake()
+    {
+        base.Awake();
+        MainCamera = Camera.main;
+    }
+
     void Update()
     {
         HandleSowing();
@@ -12,6 +21,8 @@ public class GameManager : Singleton<GameManager>
 
     private void HandleSowing()
     {
+        SowingManager.Instance.TryChangeCurrentPlant();
+
         if (!SowingManager.Instance.IsSowing)
             return;
 

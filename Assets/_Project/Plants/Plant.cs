@@ -4,12 +4,16 @@
 public class Plant : ScriptableObject
 {
     [SerializeField]
-    private LayerMask whereMightGrow;
-    public LayerMask WhereMightGrow => whereMightGrow;
-
-    [SerializeField]
     private GameObject plantPrefab;
     public GameObject PlantPrefab => plantPrefab;
+
+    [SerializeField]
+    private int seedCost;
+    public int SeedCost => seedCost;
+
+    [SerializeField]
+    private LayerMask whereMightGrow;
+    public LayerMask WhereMightGrow => whereMightGrow;
 
     [SerializeField]
     private float growingTime = 5f;
