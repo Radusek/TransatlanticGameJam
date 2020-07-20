@@ -44,11 +44,15 @@ public class MeteorDestruction : MonoBehaviour
         GetComponent<Rigidbody>().isKinematic = true;
         hitZoneObject.GetComponent<ParticleSystem>().Stop();
 
-        other?.GetComponent<Tree>().DestroyTree();
+        bool hitAnotherMeteor = false;
+        if (other != null)
+        {
+            hitAnotherMeteor = other.gameObject.layer == gameObject.layer;
+            other.GetComponent<Tree>().DestroyTree();
+        }
 
-        bool hitAnotherMeteor = other.gameObject.layer == gameObject.layer;
         if (!triggerInteraction && WillDestroyPlanet && !hitAnotherMeteor)
-            Debug.Log("you lose");
+            GameManager.Instance.Lives--;
         yield return destroyWait;
         Destroy(gameObject);
         Destroy(hitZoneObject);

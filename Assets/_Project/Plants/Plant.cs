@@ -18,4 +18,8 @@ public class Plant : ScriptableObject
     [SerializeField]
     private float growingTime = 5f;
     public float GrowingTime => growingTime;
+
+    [SerializeField] [TextArea]
+    private string description;
+    public string Description => $"{description}\nSeed cost: {SeedCost}\nGrowing time: {GrowingTime:n0}s";
 }

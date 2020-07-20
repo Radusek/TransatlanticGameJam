@@ -18,3 +18,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   growingTime: 4
+  description: Increases seed generation bonus when it rains.

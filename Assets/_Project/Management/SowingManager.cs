@@ -6,6 +6,7 @@ public class SowingManager : Singleton<SowingManager>
 {
     [SerializeField]
     private Plant[] plants;
+    public Plant[] Plants => plants;
 
     [SerializeField]
     private ParticleSystem sowingHintParticles;

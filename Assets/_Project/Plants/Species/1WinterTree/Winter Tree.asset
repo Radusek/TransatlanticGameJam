@@ -18,3 +18,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   growingTime: 1
+  description: A regular tree. No extra effects.
